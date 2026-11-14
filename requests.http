@@ -1,0 +1,48 @@
+### Cadastro com dados validos (sucesso 201)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Maria",
+    "email": "maria@example.com",
+    "password": "123456"
+}
+
+### Cadastro sem nome (erro 400)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "alberico@example.com",
+    "password": "123456"
+}
+
+### Cadastro com email inválido (erro 400)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Alberico",
+    "email": "albericoexample.com",
+    "password": "123456"
+}
+
+### Cadastro com senha curta (erro 400)
+POST http://localhost:3000/auth/register        
+Content-Type: application/json
+
+{
+    "name": "Alberico",
+    "email": "alberico@example.com",
+    "password": "123"
+}
+
+###Cadastro com senha com números (erro 400)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Alberico",
+    "email": "alberico@example.com",
+    "password": 123456
+}
