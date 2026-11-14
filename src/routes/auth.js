@@ -25,6 +25,11 @@ router.post('/register', async (req, res) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(normalizedEmail);
+      if (existing) {
+        return res.status(409).json({ error: 'Email já cadastrado.' });
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
     const result = db
