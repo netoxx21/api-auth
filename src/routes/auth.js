@@ -52,8 +52,17 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
     }
 
-    //Temporario: ainda nao implementado
-    res.status(200).json({ message: 'Login bem-sucedido (temporário).' });
+    const user = db
+    .prepare('SELECT id, name, email, password_hash FROM users WHERE email = ?')
+    .get(email.toLowerCase().trim());
+
+    const passwordMatches = user && (await bcrypt.compare(password, user.password_hash));
+    if (!passwordMatches) {
+        return res.status(401).json({ error: 'Email ou senha inválidos.' });
+    }
+
+    //temporario
+    res.status(200).json({ user: { id: user.id, name: user.name, email: user.email } });
 })
 
 export default router;
