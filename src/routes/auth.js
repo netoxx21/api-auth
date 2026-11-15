@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import db from '../db.js';
+import jwt from 'jsonwebtoken';
+
+if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET não definido no arquivo .env');
+}
 
 const router = Router();
 
@@ -42,5 +47,34 @@ router.post('/register', async (req, res) => {
         email: normalizedEmail,
      });
 });
+
+
+//POST /auth/login
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body ?? {};
+
+    if (!isText(email) || !isText(password)) {
+        return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+    }
+
+    const user = db
+    .prepare('SELECT id, name, email, password_hash FROM users WHERE email = ?')
+    .get(email.toLowerCase().trim());
+
+    const passwordMatches = user && (await bcrypt.compare(password, user.password_hash));
+    if (!passwordMatches) {
+        return res.status(401).json({ error: 'Email ou senha inválidos.' });
+    }
+
+    //temporario
+    const token = jwt.sign({ sub: String(user.id)}, process.env.JWT_SECRET, {
+         expiresIn: '1h' 
+        });
+        
+        res.json ({
+            token,
+            user: { id: user.id, name: user.name, email: user.email }
+        });
+})
 
 export default router;
