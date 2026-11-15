@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import db from '../db.js';
+import jwt from 'jsonwebtoken';
+
+if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET não definido no arquivo .env');
+}
 
 const router = Router();
 
@@ -62,7 +67,14 @@ router.post('/login', async (req, res) => {
     }
 
     //temporario
-    res.status(200).json({ user: { id: user.id, name: user.name, email: user.email } });
+    const token = jwt.sign({ sub: String(user.id)}, process.env.JWT_SECRET, {
+         expiresIn: '1h' 
+        });
+        
+        res.json ({
+            token,
+            user: { id: user.id, name: user.name, email: user.email }
+        });
 })
 
 export default router;
