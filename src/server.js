@@ -1,10 +1,12 @@
 import express from 'express';
 import authRoutes from './routes/auth.js';
+import usersRoutes from './routes/users.js';
 
 const app = express();
 
 app.use(express.json());//transforma o corpo da requisição em json
 app.use('/auth', authRoutes);
+app.use('/users', usersRoutes);
 
 // Middleware para registrar as requisições no console
 app.use((req, res, next) => {
