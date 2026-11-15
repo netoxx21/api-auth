@@ -1,15 +1,15 @@
 {
   "name": "api-auth",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "API REST de cadastro e login com Node.js, Express, SQLite e JWT",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "dev": "node --watch --env-file=.env src/server.js",
     "start": "node --env-file=.env src/server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["nodejs", "express", "jwt", "sqlite", "bcrypt", "rest-api", "authentication"],
+  "author": "Albérico Cordeiro",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.3",
