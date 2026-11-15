@@ -1,104 +1,123 @@
-### Cadastro com dados validos (sucesso 201)
-POST http://localhost:3000/auth/register
+# API de Autenticação: requisições de exemplo
+# Requer a extensão REST Client do VS Code e o servidor rodando.
+# Execute na ordem: o login (nº 8) guarda o token usado na rota protegida (nº 12).
+
+@baseUrl = http://localhost:3000
+
+### 1. Status da API
+GET {{baseUrl}}/
+
+### 2. Cadastro válido (201)
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "name": "Maria",
-    "email": "maria@example.com",
-    "password": "123456"
+  "name": "Maria",
+  "email": "maria@email.com",
+  "password": "senha12345"
 }
 
-### Cadastro sem nome (erro 400)
-POST http://localhost:3000/auth/register
+### 3. Cadastro com e-mail repetido (409)
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "email": "alberico@example.com",
-    "password": "123456"
+  "name": "Maria",
+  "email": "maria@email.com",
+  "password": "senha12345"
 }
 
-### Cadastro com email inválido (erro 400)
-POST http://localhost:3000/auth/register
+### 4. Cadastro sem nome (400)
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "name": "Alberico",
-    "email": "albericoexample.com",
-    "password": "123456"
+  "email": "joao@email.com",
+  "password": "senha12345"
 }
 
-### Cadastro com senha curta (erro 400)
-POST http://localhost:3000/auth/register        
+### 5. Cadastro com e-mail inválido (400)
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "name": "Alberico",
-    "email": "alberico@example.com",
-    "password": "123"
+  "name": "João",
+  "email": "joao-sem-arroba",
+  "password": "senha12345"
 }
 
-###Cadastro com senha com números (erro 400)
-POST http://localhost:3000/auth/register
+### 6. Cadastro com senha curta (400)
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "name": "Alberico",
-    "email": "alberico@example.com",
-    "password": 123456
+  "name": "João",
+  "email": "joao@email.com",
+  "password": "123"
 }
 
-###Login sem senha (erro 400)
-POST http://localhost:3000/auth/login
+### 7. Cadastro com senha numérica (400)
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "email": "maria@example.com"
+  "name": "João",
+  "email": "joao@email.com",
+  "password": 12345678
 }
 
-###Login valido
+### 8. Login válido (200)
 # @name login
-POST http://localhost:3000/auth/login
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "maria@example.com",
-    "password": "123456"
+  "email": "maria@email.com",
+  "password": "senha12345"
 }
 
-###Login com senha incorreta (erro 401)
-POST http://localhost:3000/auth/login
+### 9. Login com senha errada (401)
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "maria@example.com",
-    "password": "senhaerrada"
+  "email": "maria@email.com",
+  "password": "senhaerrada"
 }
 
-###Login com email inexistente (erro 401)
-POST http://localhost:3000/auth/login
+### 10. Login com e-mail inexistente (401)
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "nonexistent@example.com",
-    "password": "123456"
+  "email": "ninguem@email.com",
+  "password": "senha12345"
 }
 
-###Login com email em maiusculo (sucesso 200)
-POST http://localhost:3000/auth/login
+### 11. Login sem senha (400)
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "MARIA@EXAMPLE.COM",
-    "password": "123456"
+  "email": "maria@email.com"
 }
 
-### Rota protegida sem token (erro 401)
-GET http://localhost:3000/users/me
-
-### Rota protegida com token qualquer (temporario: sucesso 200)
-GET http://localhost:3000/users/me
-Authorization: Bearer qualquer-token
-
-### Rota protegida com token válido, execute antes o login valido (sucesso 200)
-GET http://localhost:3000/users/me
+### 12. Rota protegida com token válido (200)
+GET {{baseUrl}}/users/me
 Authorization: Bearer {{login.response.body.$.token}}
+
+### 13. Rota protegida sem token (401)
+GET {{baseUrl}}/users/me
+
+### 14. Rota protegida com token inválido (401)
+GET {{baseUrl}}/users/me
+Authorization: Bearer token-falso
+
+### 15. Rota inexistente (404)
+GET {{baseUrl}}/nada
+
+### 16. JSON malformado (400)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{ "name": "Maria",}

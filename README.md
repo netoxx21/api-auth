@@ -14,6 +14,28 @@ API REST de cadastro e login contruída com Node.js, Express, SQLite, bcrypt e J
 
 A API sobe em `http://localhost:3000` (ou na porta definida em `PORT`).
 
+## Estrutura do projeto
+
+
+src/
+├── db.js                 # conexão SQLite e criação da tabela users
+├── server.js             # configuração do Express e montagem das rotas
+├── middleware/
+│   └── auth.js           # valida o token JWT (requireAuth)
+└── routes/
+    ├── auth.js           # POST /auth/register e POST /auth/login
+    └── users.js          # GET /users/me (rota protegida)
+
+
+## Variáveis de ambiente
+
+| Variável | Descrição |
+|---|---|
+| JWT_SECRET | Chave usada para assinar os tokens JWT. Use uma string longa e aleatória |
+| PORT | Porta do servidor (padrão: 3000) |
+
+Use o arquivo .env.example como modelo.
+
 ## Endpoints
 
 O arquivo [`requests.http`](requests.http) reúne exemplos prontos de requisição para testar a API no VS Code com a extensão REST Client.
@@ -136,6 +158,21 @@ json
 | 401 | Token adulterado, inválido ou expirado | Token inválido ou expirado. |
 | 404 | Token válido, mas o usuário não existe mais | Usuário não encontrado. |
 
-## Status
+## Decisões de segurança
 
-Em desenvolvimento. Rotas implementadas: cadastro, login e rota protegida.
+- *Senhas:* armazenadas apenas como hash bcrypt (com salt). A senha e o hash nunca são devolvidos pela API.
+- *Login:* a mesma mensagem (Credenciais inválidas.) é devolvida para e-mail inexistente e senha incorreta, para não revelar quais e-mails estão cadastrados.
+- *Token JWT:* assinado com JWT_SECRET, validade de 1 hora, verificado com algoritmo fixo (HS256). O payload guarda apenas o id do usuário.
+- *SQL:* todas as consultas usam parâmetros (?), o que previne SQL injection.
+- *Segredos:* o .env e o banco local ficam fora do Git (.gitignore).
+- *Erros:* respostas de erro não expõem detalhes internos nem stack traces.
+
+## Status
+Versão 1.0 concluída: cadastro, login com JWT e rota protegida.
+
+## Próximos passos
+
+- Rate limiting no login, helmet e cors
+- Validação com zod
+- Testes automatizados
+- Refresh token
