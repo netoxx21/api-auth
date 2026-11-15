@@ -56,6 +56,7 @@ Content-Type: application/json
 }
 
 ###Login valido
+# @name login
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
@@ -90,3 +91,14 @@ Content-Type: application/json
     "email": "MARIA@EXAMPLE.COM",
     "password": "123456"
 }
+
+### Rota protegida sem token (erro 401)
+GET http://localhost:3000/users/me
+
+### Rota protegida com token qualquer (temporario: sucesso 200)
+GET http://localhost:3000/users/me
+Authorization: Bearer qualquer-token
+
+### Rota protegida com token válido, execute antes o login valido (sucesso 200)
+GET http://localhost:3000/users/me
+Authorization: Bearer {{login.response.body.$.token}}

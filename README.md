@@ -100,6 +100,42 @@ curl -X POST http://localhost:3000/auth/login \
 
 A mensagem do `401` é a mesma nos dois casos de propósito, para não revelar quais e-mails estão cadastrados.
 
+### GET /users/me
+
+Retorna os dados do usuário autenticado. Rota protegida: exige o token JWT obtido no login.
+
+*Cabeçalho obrigatório*
+
+| Cabeçalho | Valor |
+|---|---|
+| Authorization | Bearer <token> |
+
+*Exemplo*
+
+bash
+curl http://localhost:3000/users/me \
+  -H "Authorization: Bearer SEU_TOKEN_AQUI"
+
+
+*Resposta de sucesso: 200 OK*
+
+json
+{
+  "id": 1,
+  "name": "Maria",
+  "email": "maria@email.com",
+  "created_at": "2026-11-15 12:00:00"
+}
+
+
+*Respostas de erro*
+
+| Status | Quando acontece | Mensagem |
+|---|---|---|
+| 401 | Cabeçalho ausente ou fora do formato Bearer <token> | Token não informado. |
+| 401 | Token adulterado, inválido ou expirado | Token inválido ou expirado. |
+| 404 | Token válido, mas o usuário não existe mais | Usuário não encontrado. |
+
 ## Status
 
-Em desenvolvimento. Rotas implementadas: cadastro e login. Em breve: rota protegida com middleware de autenticação.
+Em desenvolvimento. Rotas implementadas: cadastro, login e rota protegida.
