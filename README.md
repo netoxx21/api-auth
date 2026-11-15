@@ -59,6 +59,47 @@ json
 
 Os erros seguem o formato { "error": "mensagem" }.
 
+### POST /auth/login
+
+Autentica um usuário e devolve um token JWT válido por 1 hora.
+
+*Corpo da requisição (JSON)*
+
+| Campo | Tipo | Regras |
+|---|---|---|
+| `email` | string | obrigatório (não diferencia maiúsculas de minúsculas) |
+| `password` | string | obrigatório |
+
+*Exemplo*
+
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"maria@email.com","password":"senha12345"}'
+```
+
+*Resposta de sucesso: `200 OK`*
+
+```json
+{
+  "token": "eyJhbGciOi...",
+  "user": {
+    "id": 1,
+    "name": "Maria",
+    "email": "maria@email.com"
+  }
+}
+```
+
+*Respostas de erro*
+
+| Status | Quando acontece | Mensagem |
+|---|---|---|
+| `400` | E-mail ou senha ausentes (ou não são texto) | `E-mail e senha são obrigatórios.` |
+| `401` | E-mail inexistente ou senha incorreta | `Credenciais inválidas.` |
+
+A mensagem do `401` é a mesma nos dois casos de propósito, para não revelar quais e-mails estão cadastrados.
+
 ## Status
 
-Em desenvolvimento.
+Em desenvolvimento. Rotas implementadas: cadastro e login. Em breve: rota protegida com middleware de autenticação.
