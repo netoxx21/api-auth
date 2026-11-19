@@ -6,12 +6,13 @@ import usersRoutes from './routes/users.js';
 
 const app = express();
 
-// Libera o front para chamar a API
-app.use(
-  cors({
-    origin: ['http://127.0.0.1:5500', 'http://localhost:5500'],
-  })
-);
+// Origens do front liberadas para chamar a API (definidas no .env)
+const allowedOrigins = (process.env.CORS_ORIGIN ?? '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+
+app.use(cors({ origin: allowedOrigins}));
 
 //transforma o corpo da requisição em json
 app.use(express.json());
