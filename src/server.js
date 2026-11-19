@@ -1,8 +1,17 @@
+import cors from 'cors';
 import express from 'express';
 import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
 
+
 const app = express();
+
+// Libera o front para chamar a API
+app.use(
+  cors({
+    origin: ['http://127.0.0.1:5500', 'http://localhost:5500'],
+  })
+);
 
 //transforma o corpo da requisição em json
 app.use(express.json());

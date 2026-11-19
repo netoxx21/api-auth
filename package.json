@@ -8,12 +8,21 @@
     "dev": "node --watch --env-file=.env src/server.js",
     "start": "node --env-file=.env src/server.js"
   },
-  "keywords": ["nodejs", "express", "jwt", "sqlite", "bcrypt", "rest-api", "authentication"],
+  "keywords": [
+    "nodejs",
+    "express",
+    "jwt",
+    "sqlite",
+    "bcrypt",
+    "rest-api",
+    "authentication"
+  ],
   "author": "Albérico Cordeiro",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^13.0.3",
+    "cors": "^2.8.6",
     "express": "^5.3.0",
     "jsonwebtoken": "^9.0.3"
   }
