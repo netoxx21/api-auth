@@ -1,8 +1,18 @@
+import cors from 'cors';
 import express from 'express';
 import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
 
+
 const app = express();
+
+// Origens do front liberadas para chamar a API (definidas no .env)
+const allowedOrigins = (process.env.CORS_ORIGIN ?? '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+
+app.use(cors({ origin: allowedOrigins}));
 
 //transforma o corpo da requisição em json
 app.use(express.json());
