@@ -4,7 +4,7 @@ API REST de cadastro e login contruída com Node.js, Express, SQLite, bcrypt e J
 
 ## Tecnologias 
 
--Node.js; Express; better-sqlite3; bcryptjs; jsonwebtoken.
+-Node.js; Express; better-sqlite3; bcryptjs; jsonwebtoken; cors.
 
 ## Como rodar 
 
@@ -33,7 +33,7 @@ src/
 |---|---|
 | JWT_SECRET | Chave usada para assinar os tokens JWT. Use uma string longa e aleatória |
 | PORT | Porta do servidor (padrão: 3000) |
-
+| `CORS_ORIGIN` | Origens do front liberadas para chamar a API pelo navegador, separadas por vírgula (ex: `http://127.0.0.1:5500,http://localhost:5500`) |
 Use o arquivo .env.example como modelo.
 
 ## Endpoints
@@ -166,13 +166,14 @@ json
 - *SQL:* todas as consultas usam parâmetros (?), o que previne SQL injection.
 - *Segredos:* o .env e o banco local ficam fora do Git (.gitignore).
 - *Erros:* respostas de erro não expõem detalhes internos nem stack traces.
+- *CORS*: apenas as origens listadas em `CORS_ORIGIN` podem chamar a API pelo navegador. Sem a variável definida, nenhuma origem liberada.
 
 ## Status
 Versão 1.0 concluída: cadastro, login com JWT e rota protegida.
 
 ## Próximos passos
 
-- Rate limiting no login, helmet e cors
+- Rate limiting no login, helmet.
 - Validação com zod
 - Testes automatizados
 - Refresh token
